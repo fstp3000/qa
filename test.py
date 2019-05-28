@@ -24,13 +24,13 @@ for url in url_list:
     res = res[1]
     count = 0
     group_qa = {}
+    qas = {}
     for i in res:
         if i[-1] == 6:
             if count == 0:
                 count = 1
                 print('標題')
-                pri:w
-                nt(i[1])
+                print(i[1])
                 data['標題']=i[1]
                 print('標題描述')
                 if (i[2]==None):
@@ -42,8 +42,11 @@ for url in url_list:
             else:
                 break
         elif i[3] == 2 or i[3]==4 or i[3] == 5:
-            print('Question:',i[1][i[1].find('.')+1:])
+            question=i[1][i[1].find('.')+1:]
+            print('Question:',question)
             print('Answers:')
+            uni_ans=[]
+            ans={}
             for index,answer in enumerate(i[4][0][1]):
                 if answer[0]=="":
                     break
@@ -52,7 +55,10 @@ for url in url_list:
                 print(answer[0],end='')
                 print('  ',end='')
 		#print('answer',i[4][0][1])
-
+                uni_ans.append(answer[0])
+            ans["可選答案"]=uni_ans
+            ans["答案"]="None"
+            qas[question]=ans
             print('\n-----------------------------------------------------')
         elif i[3] == 8:
             print('group question name:', i[1])
@@ -63,6 +69,8 @@ for url in url_list:
             #assert (i[3] != 11)
             print(i)
             print('-----------------------------------------------------')
+    print(data)
+    print(qas)
     print('=====================================================================')
     print('=====================================================================')
     print('=====================================================================')
