@@ -1,7 +1,7 @@
 #coding=utf-8
 import requests
 import json
-
+import pprint
 url_list=['https://docs.google.com/forms/d/1xPSu0lT2Mr1XGSpVRlvk6DNQbeEySLOn3Kuxq0S-pv4/viewform?fbclid=IwAR3fUuFlZWmCWq1s7jVGLj6VSvSV3pp00_DtGRTc1_xXFFEW9xL7EqSKHQM&edit_requested=true#responses',
 	'https://docs.google.com/forms/d/e/1FAIpQLSfKeNxWwzaEBEykLBivIBjkEZEbnJPaB65C-psY2CaVicrReA/viewform',
 	]
@@ -23,7 +23,8 @@ for url in url_list:
     print('title:',title)
     res = res[1]
     count = 0
-    group_qa = {}
+    set_qa=[]
+    group_qa = {"題組名稱":"None"}
     qas = {}
     for i in res:
         if i[-1] == 6:
@@ -61,6 +62,10 @@ for url in url_list:
             qas[question]=ans
             print('\n-----------------------------------------------------')
         elif i[3] == 8:
+            group_qa['問題']=qas
+            set_qa.append(group_qa)
+            qas={}
+            group_qa = {}
             print('group question name:', i[1])
             print('*****************************************************')
         elif i[3] == 0 or i[3] == 1:
@@ -69,8 +74,10 @@ for url in url_list:
             #assert (i[3] != 11)
             print(i)
             print('-----------------------------------------------------')
+    data["題組"]=set_qa
     print(data)
-    print(qas)
+    with open(title+'.json', 'w') as outfile:
+        json.dump(data, outfile)
     print('=====================================================================')
     print('=====================================================================')
     print('=====================================================================')
