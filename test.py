@@ -8,11 +8,16 @@ url_list=['https://docs.google.com/forms/d/1xPSu0lT2Mr1XGSpVRlvk6DNQbeEySLOn3Kux
 
 for url in url_list:
 	res = requests.get(url).text
+	topic_start = res.find('<meta itemprop="name" content="')
+	topic_end = res.find('">', topic_start)
 	start = res.find('FB_PUBLIC_LOAD_DATA_')
 	end = res.find('</script>', start)
+	#####
+	title = res[topic_start+31: topic_end]
+	#####
 	res = res[start+23:end-1]
 	res = json.loads(res)[1]
-	#print('topic\n',res[0].replace(" ",""))
+	print('title:',title)
 	res = res[1]
 	count = 0
 	for i in res:
@@ -25,7 +30,7 @@ for url in url_list:
 				if (i[2]==None):
 					print("No content")
 				else:
-					print(i[2].replace(" ",""))
+					print(i[2].replace("	",""))
 				print('###########################################################################################')
 			else:
 				break
@@ -39,9 +44,10 @@ for url in url_list:
 		elif i[3] == 8:
 			print('group question name:', i[1])
 			print('********************************************************************************************')
-		elif i[3] == 0:
+		elif i[3] == 0 or i[3] == 1:
 			next
 		else:
+			assert (i[3] != 11)
 			print(i)
 			print('--------------------------------------------------------------------------------------------')
 	print('=================================================================================================')
