@@ -116,7 +116,7 @@ for url in url_list:
             id = 0
             if qas != {}:
                 for key, _ in qas.items():
-                    if "性別" in key or "年齡" in key or "職業" in key:
+                    if "性別" in key or "年齡" in key or "職業" in key or "學歷" in key:
                         id += 1
                 if id> 2:
                     data["個資"]= qas
@@ -158,6 +158,8 @@ for url in url_list:
 
     if set_qa != []:
         data["題組"]=set_qa
+        if "個資" not in data:
+            data["個資"]={}
         set_qa=[]
         print(data)
         with open('./qa/'+title+'.json', 'w', encoding='utf-8') as outfile:
